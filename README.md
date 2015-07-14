@@ -20,6 +20,9 @@ express-resource が新しいExpressに対応していなかったので、node.
 
 このプロジェクトをベースに実装。
 
+## DBスキーマ
+```create table users ( id int primary key auto_increment, name text );```
+
 ## 実装箇所
 * app.js
 * routes/users.js
