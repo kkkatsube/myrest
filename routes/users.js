@@ -1,5 +1,4 @@
 var express = require('express');
-var mysql = require('../models/mysql');
 var users = require('../models/users');
 
 function response(req, res){
