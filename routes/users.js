@@ -1,68 +1,43 @@
 var express = require('express');
-var router = express.Router();
-var mysql = require('mysql');
+var mysql = require('../models/mysql');
+var users = require('../models/users');
 
-var connection = mysql.createPool({
-  connectionLimit : 10,
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'root',
-  database: process.env.DB_NAME || 'test'
-});
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+function response(req, res){
+    return function (err, rows) {
+        if (err) throw err;
+        res.send(rows);
+    }
+}
 
 module.exports = {
-    index : function (req, res) {
-        connection.query('select * from users', function (err, rows) {
-            if (err) throw err;
-            res.send(rows);
-        });
+    index : function ( req, res ) {
+        users.list( response( req, res ) );
     },
-    show : function (req, res) {
+    show : function ( req, res ) {
         var id = req.params.id;
         console.log( 'GET : ' + id );
-        connection.query('select * from users where id = ?', [id], function (err, rows) {
-            if (err) throw err;
-            res.send(rows);
-        });
+        users.read( id, response( req, res ) );
     },
     create : function (req, res) {
         var user = req.body;
         var name = user.name;
         console.log( 'POST : ' + name + ' | ' + JSON.stringify( user ) );
-        
         if( !name )
             throw new Error( 'name not found : ' + JSON.stringify( user ) );
-        
-        connection.query('insert into users ( name ) values( ? )', [ name ], function (err, rows) {
-            if (err) throw err;
-            res.send(rows);
-        });
+        users.create( name, response( req, res ) );
     },
     update : function (req, res) {
         var id = req.params.id;
         var user = req.body;
         var name = user.name;
         console.log( 'PUT : [' + id + ']' + name + ' | ' + JSON.stringify( user ) );
-        
         if( !name )
             throw new Error( 'name not found : ' + JSON.stringify( user ) );
-        
-        connection.query('update users set name = ? where id = ?', [ name, id ], function (err, rows) {
-            if (err) throw err;
-            res.send(rows);
-        });
+        users.update( id, name, response( req, res ) );
     },
     destroy : function (req, res) {
         var id = req.params.id;
         console.log( 'DELETE : ' + id );
-        connection.query('delete from users where id = ?', [ id ], function (err, rows) {
-            if (err) throw err;
-            res.send(rows);
-        });
+        users.delete( id, response( req, res ) );
     },
 };
