@@ -11,6 +11,10 @@ var Users = module.exports = function() {};
  * Usersモデルの全レコードを取得する
  * @method list
  * @param {Function} func callback関数 callback(err,rows)
+ *  - rows
+ *  {
+ *      users : rows mysqlのquery result
+ *  }
  */
 Users.prototype.list = function( func ) {
     mysql.query('select * from users', function (err,rows){
@@ -25,7 +29,8 @@ Users.prototype.list = function( func ) {
  * 指定IDのUsersモデルを取得する
  * @method read
  * @param {Integer} id 取得するUsersモデルのID
- * @param {Function} func callback関数 callback(err,rows)
+ * @param {Function} func callback関数 callback(err,row)
+ *  - row mysqlのquery result の 0件目
  */
 Users.prototype.read = function( id, func ) {
     mysql.query('select * from users where id = ?', [id], function (err,rows){

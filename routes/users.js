@@ -2,9 +2,9 @@ var express = require('express');
 var Users = require('../models/users');
 
 function response(req, res){
-    return function (err, rows) {
+    return function (err, result) {
         if (err) throw err;
-        res.send(rows);
+        res.send(result);
     }
 }
 
