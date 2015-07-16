@@ -21,11 +21,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/users', users.index);
-app.get('/users/:id', users.show);
+app.get('/users', users.list);
+app.get('/users/:id', users.read);
 app.post('/users', users.create);
 app.put('/users/:id', users.update);
-app.delete('/users/:id', users.destroy);
+app.delete('/users/:id', users.delete);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
