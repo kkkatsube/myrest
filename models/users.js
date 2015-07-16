@@ -13,7 +13,12 @@ var Users = module.exports = function() {};
  * @param {Function} func callbackä÷êî callback(err,rows)
  */
 Users.prototype.list = function( func ) {
-    mysql.query('select * from users', func);
+    mysql.query('select * from users', function (err,rows){
+        var result = {
+            "users" : rows
+        };
+        func(err,result);
+    });
 }
 
 /**
@@ -24,7 +29,6 @@ Users.prototype.list = function( func ) {
  */
 Users.prototype.read = function( id, func ) {
     mysql.query('select * from users where id = ?', [id], function (err,rows){
-        console.log( 'DEBUG : ' + rows.length );
         if( rows.length != 1 )
             throw new Error( 'User not found : ' + id );
         func(err,rows[0]);
